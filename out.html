@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    const map = new mapboxgl.Map({
+        style: 'mapbox://styles/dhruvpatel1999/ckw7mxfnt4rpi15l9hu7gnz51',
+        center: [-123.066666, 49.316666],
+        zoom: 10.5,
+        pitch: 55,
+        bearing: 0,
+        container: 'map',
+        antialias: true,
+        accessToken : 'pk.eyJ1IjoiZGhydXZwYXRlbDE5OTkiLCJhIjoiY2t3N213YTkyOHdocjJubnV4ejMwaWQ2ayJ9.1szBXJZi6kHtzG1enC4lXA'
+    });
+</script>
+
+</body>
+</html>
