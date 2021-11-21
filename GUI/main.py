@@ -3,10 +3,21 @@ import sys
 import os
 import time
 
+import board
+from digitalio import DigitalInOut, Direction
+import adafruit_fingerprint_fix as adafruit_fingerprint
+
+led = DigitalInOut(board.D13)
+led.direction = Direction.OUTPUT
+
+import serial
+uart = serial.Serial("/dev/ttyS0", baudrate=57600, timeout=1)
+
+finger = adafruit_fingerprint.Adafruit_Fingerprint(uart)
+
 from PyQt5 import uic,QtGui
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtCore import QFile
-#from PyQt5.QtUiTools import QUiLoader
 
 orange = "#FA992B"
 green = "#00E68F"
@@ -33,11 +44,12 @@ class gui(QWidget):
 
 #call the method in fingerprint.py and send result to
     def onRegister(self):
-         self.registerButton.setStyleSheet("background-color : " + orange)
+        self.registerButton.setStyleSheet("background-color : " + orange)
          #self.show()
-         print("Register clicked")
-         self.statusLabel.setText("Place thumb on the scanner")
-         QApplication.processEvents()
+        print("Register clicked")
+        QApplication.processEvents()
+         #self.statusLabel.setText("Place thumb on the scanner")
+        ''''QApplication.processEvents()
          status = self.readFingerPrint()
 
          #first fingerprint
@@ -65,7 +77,70 @@ class gui(QWidget):
          self.registerButton.setStyleSheet("background-color : " + grey)
          self.statusLabel.setStyleSheet("background-color : " + grey)
          self.statusLabel.setPixmap(QtGui.QPixmap(""))
-         self.statusLabel.setText("")
+         self.statusLabel.setText("")'''
+         
+        for fingerimg in range(1, 3):
+            if fingerimg == 1:
+                 self.statusLabel.setText("Place thumb on the scanner")
+            else:
+                 self.statusLabel.setText("Place thumb again on the scanner")
+
+            while True:
+                self.statusLabel.setPixmap(QtGui.QPixmap(""))
+                i = finger.get_image()
+                if i == adafruit_fingerprint.OK:
+                    self.statusLabel.setPixmap(QtGui.QPixmap("check.jpg"))
+                    QApplication.processEvents()
+                    break
+                if i == adafruit_fingerprint.NOFINGER:
+                    print(".", end="", flush=True)
+                elif i == adafruit_fingerprint.IMAGEFAIL:
+                    self.error()
+                else:
+                    self.error()
+
+            print("Templating...", end="", flush=True)
+            i = finger.image_2_tz(fingerimg)
+            if i == adafruit_fingerprint.OK:
+                print("Templated")
+            else:
+                if i == adafruit_fingerprint.IMAGEMESS:
+                    print("Image too messy")
+                elif i == adafruit_fingerprint.FEATUREFAIL:
+                    print("Could not identify features")
+                elif i == adafruit_fingerprint.INVALIDIMAGE:
+                    print("Image invalid")
+                else:
+                    print("Other error")
+
+            if fingerimg == 1:
+                print("Remove finger")
+                time.sleep(1)
+                while i != adafruit_fingerprint.NOFINGER:
+                    i = finger.get_image()
+
+        print("Creating model...", end="", flush=True)
+        i = finger.create_model()
+        if i == adafruit_fingerprint.OK:
+            print("Created")
+                    
+                    #saved_model = finger.get_fpdata('char')
+                    #TODO: send to database
+                    #print(saved_model)
+                    
+        else:
+            if i == adafruit_fingerprint.ENROLLMISMATCH:
+                print("Prints did not match")
+                self.error()
+            else:
+                print("Other error")
+                self.error()
+
+        time.sleep(3)
+        self.registerButton.setStyleSheet("background-color : " + grey)
+        self.statusLabel.setStyleSheet("background-color : " + grey)
+        self.statusLabel.setPixmap(QtGui.QPixmap(""))
+        self.statusLabel.setText("")
 
 #makes a call to API to verify
     def onSearch(self):
