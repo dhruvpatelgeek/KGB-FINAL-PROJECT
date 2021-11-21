@@ -1,17 +1,9 @@
 const mongoose = require('mongoose')
 
 const User = mongoose.model('User',{
-    figerprint_hash:{
+    fingerprint:{
         type: String
     },
-    name:{
-        type: String
-    }, 
-    age: {
-        type: Number,
-        default: 0
-    },
-    
 })
 
 

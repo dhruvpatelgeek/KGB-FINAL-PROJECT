@@ -24,6 +24,24 @@ app.use(express.json())
 //         res.send(e)
 //     })
 // })
+app.post('/user/add', (req, res)=>{
+    console.log(req)
+    const user = new User(req.body)
+
+    user.save().then(()=>{
+        res.send("save correctly")
+    }).catch((e)=>{
+        res.send(e)
+    })
+})
+
+app.get('/getAll', (req, res)=>{
+    User.find({}).then(toret => {
+        res.send(toret)
+    }).catch((error)=>{
+        res.status(500).send(error);
+    })
+})
 
 
 
