@@ -1,0 +1,37 @@
+<div class="content">
+    <div class="nav-bar">
+            <div id="logo">
+                <img id="logo-img" src="../../assets/full-logo.png">
+            </div>    
+            <div class="normal-links" id="about">ABOUT</div>
+            <div class="normal-links" id="pricing">PRICING</div>
+        
+            <div  id="register-button-wrapper">
+                <button>
+                <p id="button-text" class="normal-links">
+                    REGISTER
+                </p>
+                </button>
+    </div>
+</div>
+
+<!-- show the scanned finerpints through here-->
+<div id="sign-in">
+    <p id="sign-in-text">
+    Sign in
+    <p>
+       
+    <form>
+        <!-- <input [(ngModel)]="uuid" #ctrl="ngModel" class="input-field" id="input-usr-id" type="text" required > -->
+        <input *ngIf="!showOneTimeField;" [(ngModel)]="uuid" type="text" class="input-field" id="input-usr-id" name="null">
+        <p id="uuid-txt" *ngIf="showOneTimeField;"> UUID: </p>
+        <p id="uuid-txt">{{uuid}}</p>
+        <input *ngIf="showOneTimeField;" [(ngModel)]="oneTimeCode" type="text" class="input-field" id="input-usr-id" name="null">
+    </form>
+    <button id="login-button" (click)="generalButton()">
+        {{status}}
+    </button>
+</div>
+</div>
+
+<div id="map" ></div>
