@@ -10,9 +10,20 @@ var generator = require('generate-password');
 
 const app = express()
 const port = process.env.PORT || 3000
+var ctr=0
 
 app.use(express.json())
 
+
+
+
+  // allow access form any HOST
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET , PUT , POST , DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, x-requested-with");
+    next(); // Important
+})
 
 
 // app.post('/users', (req, res)=>{
@@ -35,6 +46,7 @@ app.post('/user/add', (req, res)=>{
     })
 })
 
+
 app.get('/getAll', (req, res)=>{
     User.find({}).then(toret => {
         res.send(toret)
@@ -45,20 +57,24 @@ app.get('/getAll', (req, res)=>{
 
 
 
-app.get('/uuid/require', (req, res)=>{
+app.post('/uuid/require', (req, res)=>{
+    console.log("recived email reg"+ctr++);
+
     var newPassword = generator.generate({
         length: 10,
         numbers: true
     });
+  
     Shopper.findOneAndUpdate({uuid: req.body.uuid}, {password: newPassword}).then( shopper => {
         sending(shopper.email, newPassword)
-        res.send("sending")
+        res.status(200).send("sending")
     }).catch((error)=>{
-        res.status(500).send(error);
+        console.log(error);
+        res.status(500).send(error+"error finding json in body");
     })
 })
 
-app.get('/uuid/verify', (req, res)=>{
+app.post('/uuid/verify', (req, res)=>{
     Shopper.findOne({uuid: req.body.uuid}).then( shopper => {
         console.log(shopper.password)
         console.log(req.body.password)
@@ -70,5 +86,5 @@ app.get('/uuid/verify', (req, res)=>{
 })
 
 app.listen(port, ()=>{
-    console.log('Server Listening!')
+    console.log('Server Listening!' +port)
 })
