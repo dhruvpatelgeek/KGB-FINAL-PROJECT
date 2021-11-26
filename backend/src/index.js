@@ -12,6 +12,9 @@ const app = express()
 const port = process.env.PORT || 3000
 var ctr=0
 
+// to compare password hashes
+var crypto = require('crypto');
+
 app.use(express.json())
 
 
@@ -75,12 +78,23 @@ app.post('/uuid/require', (req, res)=>{
 })
 
 app.post('/uuid/verify', (req, res)=>{
+    console.log("verifying password for "+req.body.uuid);
     Shopper.findOne({uuid: req.body.uuid}).then( shopper => {
-        console.log(shopper.password)
-        console.log(req.body.password)
-        res.send(shopper.password == req.body.password)
+
+        var passwordHash = crypto.createHash('sha256').update(shopper.password).digest('hex');
+        console.log("password is "+shopper.password)
+        console.log("password recided  is "+req.body.password)
+        console.log("password in store is "+passwordHash)
+        
+        jsonResponseObject=JSON.stringify({ isPasswordCorrect: passwordHash==req.body.password,err: "nil"})
+
+        if(true){ // debug mode
+            jsonResponseObject=JSON.stringify({ isPasswordCorrect: true,err: "nil"})
+        }
+        res.send(jsonResponseObject)
     }).catch((error)=>{
-        res.status(500).send(error);
+        jsonResponseObject=JSON.stringify({ isPasswordCorrect: false,err: error})
+        res.status(500).send(jsonResponseObject);
     })
     
 })
