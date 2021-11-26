@@ -1,14 +1,26 @@
+// angular modules==========================================
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-
-import { LandingPageComponent } from './landing-page/landing-page.component';
-import { StreamingPageComponent } from './streaming-page/streaming-page.component';
-
 import {NgForm} from '@angular/forms';
 import { FormsModule }   from '@angular/forms';
+//==========================================================
+
+//components================================================
+import { AppComponent } from './app.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import { StreamingPageComponent } from './streaming-page/streaming-page.component';
+//==========================================================
+
+//angular http==============================================
+import { HttpClientModule } from '@angular/common/http';
+//==========================================================
+
+//services==================================================
+import { freeapiservice } from './services/freeapi.service';
+//==========================================================
+
+
 
 
 @NgModule({
@@ -22,8 +34,9 @@ import { FormsModule }   from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [freeapiservice],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -23,9 +23,10 @@
        
     <form>
         <!-- <input [(ngModel)]="uuid" #ctrl="ngModel" class="input-field" id="input-usr-id" type="text" required > -->
+        <p id="uuid-txt" *ngIf="!showOneTimeField;"> Please Enter your UUID </p>
         <input *ngIf="!showOneTimeField;" [(ngModel)]="uuid" type="text" class="input-field" id="input-usr-id" name="null">
-        <p id="uuid-txt" *ngIf="showOneTimeField;"> UUID: </p>
-        <p id="uuid-txt">{{uuid}}</p>
+        <p id="uuid-txt" *ngIf="showOneTimeField;"> UUID: {{uuid}} </p>
+        <p id="uuid-txt" *ngIf="showOneTimeField;"> Please Enter Your One Time Password </p>
         <input *ngIf="showOneTimeField;" [(ngModel)]="oneTimeCode" type="text" class="input-field" id="input-usr-id" name="null">
     </form>
     <button id="login-button" (click)="generalButton()">
