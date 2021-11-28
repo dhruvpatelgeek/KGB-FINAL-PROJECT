@@ -61,8 +61,6 @@ app.post('/getAll', (req, res)=>{
 
 
 app.post('/uuid/require', (req, res)=>{
-    console.log("recived email reg"+ctr++);
-
     var newPassword = generator.generate({
         length: 10,
         numbers: true
