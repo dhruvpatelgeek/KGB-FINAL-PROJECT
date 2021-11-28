@@ -15,9 +15,23 @@ webpush.setVapidDetails('mailto:cpen442fastscan@gmail.com', publicVapidKey, priv
 
 const app = express()
 const port = process.env.PORT || 3000
+var ctr=0
+
+// to compare password hashes
+var crypto = require('crypto');
 
 app.use(express.json())
 
+
+
+
+  // allow access form any HOST
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET , PUT , POST , DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, x-requested-with");
+    next(); // Important
+})
 
 
 // app.post('/users', (req, res)=>{
@@ -40,7 +54,8 @@ app.post('/user/add', (req, res)=>{
     })
 })
 
-app.get('/getAll', (req, res)=>{
+
+app.post('/getAll', (req, res)=>{
     User.find({}).then(toret => {
         res.send(toret)
     }).catch((error)=>{
@@ -55,28 +70,39 @@ app.get('/verified', (req, res)=>{
 
 
 
-app.get('/uuid/require', (req, res)=>{
+app.post('/uuid/require', (req, res)=>{
     var newPassword = generator.generate({
         length: 10,
         numbers: true
     });
+  
     Shopper.findOneAndUpdate({uuid: req.body.uuid}, {password: newPassword}).then( shopper => {
         sending(shopper.email, newPassword)
-        res.send("sending")
+        res.status(200).send("sending")
     }).catch((error)=>{
-        res.status(500).send(error);
+        console.log(error);
+        res.status(500).send(error+"error finding json in body");
     })
 })
 
-app.get('/uuid/verify', (req, res)=>{
-
-
+app.post('/uuid/verify', (req, res)=>{
+    console.log("verifying password for "+req.body.uuid);
     Shopper.findOne({uuid: req.body.uuid}).then( shopper => {
-        console.log(shopper.password)
-        console.log(req.body.password)
-        res.send(shopper.password == req.body.password)
+
+        var passwordHash = crypto.createHash('sha256').update(shopper.password).digest('hex');
+        console.log("password is "+shopper.password)
+        console.log("password recided  is "+req.body.password)
+        console.log("password in store is "+passwordHash)
+        
+        jsonResponseObject=JSON.stringify({ isPasswordCorrect: passwordHash==req.body.password,err: "nil"})
+
+        // if(true){ // debug mode
+        //     jsonResponseObject=JSON.stringify({ isPasswordCorrect: true,err: "nil"})
+        // }
+        res.send(jsonResponseObject)
     }).catch((error)=>{
-        res.status(500).send(error);
+        jsonResponseObject=JSON.stringify({ isPasswordCorrect: false,err: error})
+        res.status(500).send(jsonResponseObject);
     })
     
 })
@@ -93,5 +119,5 @@ app.post('/subscribe', (req, res)=>{
 })
 
 app.listen(port, ()=>{
-    console.log('Server Listening!')
+    console.log('Backend server listening on ['+port+']')
 })

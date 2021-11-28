@@ -3,6 +3,8 @@ import * as mapboxgl from 'mapbox-gl';
 import { Map } from 'mapbox-gl';
 import {NgForm} from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { freeapiservice } from '../services/freeapi.service';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-landing-page',
@@ -10,8 +12,14 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit { // get the mapbox GL on load 
-    uuid:string='Enter your UUID here ...';
-    oneTimeCode:string='Enter your one-time-code...';
+
+    //send message ot the parent node to change the view
+
+    //[events]-----------------------------
+    @Output() authStatus = new EventEmitter<boolean>();
+    //-------------------------------------
+    uuid:string='';
+    oneTimeCode:string='';
     status:string="SEND CODE TO EMAIL";
     showOneTimeField=false;
     ngOnInit() {
@@ -28,15 +36,29 @@ export class LandingPageComponent implements OnInit { // get the mapbox GL on lo
       });
       
     }
+    constructor(private _freeapiservice:freeapiservice){ // USED TO COMMUNATE WITH THE BACKEND
+    }
     generalButton() {
         if(this.showOneTimeField==false){
-          // sent the email
-          alert("email sent")
+          console.log("sending req for",this.uuid);
+          this._freeapiservice.requestEmailCode(this.uuid).toPromise().then().finally(()=>{
+             console.log("POST REQUEST DONE")
+           });
           this.status="LOGIN"
           this.showOneTimeField=true
         } else {
-          alert("login sent")
-          // sent code to frontend to verify
+          this._freeapiservice.requestSendPassword(this.uuid,this.oneTimeCode).toPromise().then((res)=>{
+            if(res.isPasswordCorrect==true){
+              //alert("login verified")
+              this.authStatus.emit(true)
+            } else {
+              // reset to the previous state
+              this.showOneTimeField=false
+              alert("wrong password")
+            }
+          }).finally(()=>{
+            console.log("POST REQUEST DONE")
+          });
         }
     }
 

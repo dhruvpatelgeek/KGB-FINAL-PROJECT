@@ -4,7 +4,7 @@
             <img id="logo-img" src="../../assets/full-logo.png">
         </div>    
         <div  id="register-button-wrapper">
-            <button>
+            <button (click)="signOut()">
             <p id="button-text" class="normal-links">
                 SIGN OUT 
             </p>
@@ -12,12 +12,23 @@
         </div> 
     </div>
     <div class="login-info">
-        <p id="login-id">Logged in as 4deb2dc5-2e65-425d-981b-7486a127fba8</p>
+        <p id="login-id">Logged in as 72fb158f-8d8c-4892-af0e-42f22e47f33b</p>
         <p id="device-id">Paired with device-id 61IXpltdEav03rh</p>
     </div>  
     <p id="place-holder-message" *ngIf="false">
         Scan to Verify.....
     </p>
-    
+    <div id="user_stream" >
+        <div class="user-card" *ngFor="let user of user_array" >
+            <!-- https://identicon-api.herokuapp.com/luqman/ -->
+            <!-- <img class="center" src="https://identicon-api.herokuapp.com//220?format=svg"> -->
+            <img class="user-fingerprint" src="https://identicon-api.herokuapp.com/{{user.fingerprint}}/220?format=png" alt="">
+            <div class="user-details">
+                <p class="user-id">ID: {{user._id}}</p>
+                <p class="user-id">fingerprint: {{user.fingerprint}}</p>
+                <p class="user-id">Timestamp: 2021-11-20 10:18+00:00</p>
+                <p class="user-id">verified-by: UBC</p>
+            </div>
+    </div>
 </div>
 
