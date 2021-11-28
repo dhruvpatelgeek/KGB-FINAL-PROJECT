@@ -12,14 +12,14 @@ export class freeapiservice{
     //request email code 
     requestEmailCode(username: string){
         //const authurl:string =this.url+"/uuid/require"
-        const authurl:string = "http://localhost:3000/uuid/require"
+        const authurl:string = this.url+"/uuid/require"
         const httpOptions = {
             headers: new HttpHeaders({
               'Content-Type':  'application/json',
             })
           };
           var payload = {
-                uuid:"72fb158f-8d8c-4892-af0e-42f22e47f33b"
+                uuid:username
          }
          var json_load=JSON.stringify(payload)
         return this.httpclient.post<any>(authurl, json_load, httpOptions)
@@ -27,7 +27,7 @@ export class freeapiservice{
     
     requestSendPassword(username: string,password:string){
       //const authurl:string =this.url+"/uuid/require"
-      const authurl:string = "http://localhost:3000/uuid/verify"
+      const authurl:string = this.url+"/uuid/verify"
       const httpOptions = {
           headers: new HttpHeaders({
             'Content-Type':  'application/json',
@@ -36,7 +36,7 @@ export class freeapiservice{
         //var hashedPassword=crypto.createHash('sha256').update(password).digest('hex');
         var hashedPassword : string =crypto.SHA256(password).toString()
         var payload = {
-              uuid:"72fb158f-8d8c-4892-af0e-42f22e47f33b",
+              uuid:username,
               password:hashedPassword
        }
       var json_load=JSON.stringify(payload)
@@ -44,7 +44,7 @@ export class freeapiservice{
   }
     requestGetUsers(username: string,password:string){
       //const authurl:string =this.url+"/uuid/require"
-      const authurl:string = "http://localhost:3000/getAll"
+      const authurl:string = this.url+"/getAll"
       const httpOptions = {
           headers: new HttpHeaders({
             'Content-Type':  'application/json',
@@ -53,7 +53,7 @@ export class freeapiservice{
         //var hashedPassword=crypto.createHash('sha256').update(password).digest('hex');
         var hashedPassword : string =crypto.SHA256(password).toString()
         var payload = {
-              uuid:"72fb158f-8d8c-4892-af0e-42f22e47f33b",
+              uuid:username,
               password:hashedPassword
       }
       var json_load=JSON.stringify(payload)
