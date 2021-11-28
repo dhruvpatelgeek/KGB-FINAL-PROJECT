@@ -50,7 +50,7 @@ app.post('/user/add', (req, res)=>{
 })
 
 
-app.get('/getAll', (req, res)=>{
+app.post('/getAll', (req, res)=>{
     User.find({}).then(toret => {
         res.send(toret)
     }).catch((error)=>{
@@ -88,9 +88,9 @@ app.post('/uuid/verify', (req, res)=>{
         
         jsonResponseObject=JSON.stringify({ isPasswordCorrect: passwordHash==req.body.password,err: "nil"})
 
-        if(true){ // debug mode
-            jsonResponseObject=JSON.stringify({ isPasswordCorrect: true,err: "nil"})
-        }
+        // if(true){ // debug mode
+        //     jsonResponseObject=JSON.stringify({ isPasswordCorrect: true,err: "nil"})
+        // }
         res.send(jsonResponseObject)
     }).catch((error)=>{
         jsonResponseObject=JSON.stringify({ isPasswordCorrect: false,err: error})
@@ -100,5 +100,5 @@ app.post('/uuid/verify', (req, res)=>{
 })
 
 app.listen(port, ()=>{
-    console.log('Server Listening!' +port)
+    console.log('Backend server listening on ['+port+']')
 })
