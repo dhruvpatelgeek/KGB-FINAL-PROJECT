@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { freeapiservice } from '../services/freeapi.service';
 import{Users} from '../classes/users';
 @Component({
@@ -9,8 +9,11 @@ import{Users} from '../classes/users';
 export class StreamingPageComponent implements OnInit {
   uuid:string='';
   oneTimeCode:string='';
-
-  user_array:Users[] | undefined; // associatve array of item objects
+  //[events]-----------------------------
+   @Output() signOutVal = new EventEmitter<boolean>();
+  //-------------------------------------
+  user_array: Users[] = []; // associatve array of item objects
+ // associatve array of item objects
   user:Users | undefined; // single instance of item object
 
   ngOnInit(): void {
@@ -35,5 +38,9 @@ export class StreamingPageComponent implements OnInit {
         console.log(this.user_array)
       }
     );
+  }
+  signOut(){
+   
+    this.signOutVal.emit(true);
   }
 }

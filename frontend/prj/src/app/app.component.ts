@@ -23,5 +23,14 @@ export class AppComponent implements OnInit {
     // then add the new banner 
 
   }
+  signOut(){
+
+    this.authStatus=false;
+    // first remove the old landing page 
+    this.showStreamingPage=false
+    setTimeout(()=>{
+      this.showLandingPage=true
+    }, 100);
+  }
 }
 

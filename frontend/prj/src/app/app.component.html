@@ -1,8 +1,9 @@
 <!--
     we will now pipe the output event emitter formt he child and bind ti to a method call in parent 
 -->
-<!-- 
+
+
 <app-landing-page *ngIf="showLandingPage;" (authStatus)="setAuth()"></app-landing-page>  
-<app-streaming-page *ngIf="showStreamingPage;"></app-streaming-page> 
--->
-<app-streaming-page></app-streaming-page>
+<app-streaming-page *ngIf="showStreamingPage;" (signOutVal)="signOut()"></app-streaming-page> 
+
+<!-- <app-streaming-page (signOutVal)="signOut()"></app-streaming-page> -->
