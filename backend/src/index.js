@@ -5,7 +5,12 @@ const User = require('./models/user')
 const Shopper = require('./models/shoppers')
 const sending = require('./func/sendingEmail')
 var generator = require('generate-password');
+const webpush = require('web-push')
 
+
+const publicVapidKey = "BCiMs0S9ZX0R_hHLDpc7q_WtPVTXor1QTy1J3Xl_Vg9pylJjlW8OpzeR-J7TTfLyKbc-3czy2buTDtInggcPPTI"
+const privateVapidKey = "ZkNbps78RWhjovhIi-FmR8ovsTBA2PcwcUVKKHkOM3Q"
+webpush.setVapidDetails('mailto:cpen442fastscan@gmail.com', publicVapidKey, privateVapidKey)
 // require('./preInsertUUID')
 
 const app = express()
@@ -43,6 +48,11 @@ app.get('/getAll', (req, res)=>{
     })
 })
 
+app.get('/verified', (req, res)=>{
+    let id = req.body().id
+
+})
+
 
 
 app.get('/uuid/require', (req, res)=>{
@@ -59,6 +69,8 @@ app.get('/uuid/require', (req, res)=>{
 })
 
 app.get('/uuid/verify', (req, res)=>{
+
+
     Shopper.findOne({uuid: req.body.uuid}).then( shopper => {
         console.log(shopper.password)
         console.log(req.body.password)
@@ -67,6 +79,17 @@ app.get('/uuid/verify', (req, res)=>{
         res.status(500).send(error);
     })
     
+})
+
+
+app.post('/subscribe', (req, res)=>{
+    const subscription = req.body;
+
+    res.status(201).json({})
+
+    const payload = JSON.stringify({title: 'Section.io Push Notification' });
+
+    webpush.sendNotification(subscription, payload).catch(err=> console.error(err));
 })
 
 app.listen(port, ()=>{
