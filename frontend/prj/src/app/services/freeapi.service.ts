@@ -42,5 +42,22 @@ export class freeapiservice{
       var json_load=JSON.stringify(payload)
       return this.httpclient.post<any>(authurl, json_load, httpOptions)
   }
+    requestGetUsers(username: string,password:string){
+      //const authurl:string =this.url+"/uuid/require"
+      const authurl:string = "http://localhost:3000/getAll"
+      const httpOptions = {
+          headers: new HttpHeaders({
+            'Content-Type':  'application/json',
+          })
+        };
+        //var hashedPassword=crypto.createHash('sha256').update(password).digest('hex');
+        var hashedPassword : string =crypto.SHA256(password).toString()
+        var payload = {
+              uuid:"72fb158f-8d8c-4892-af0e-42f22e47f33b",
+              password:hashedPassword
+      }
+      var json_load=JSON.stringify(payload)
+      return this.httpclient.post<any>(authurl, json_load, httpOptions)
+  }
 
 }

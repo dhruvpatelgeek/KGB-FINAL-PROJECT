@@ -39,4 +39,4 @@ import { freeapiservice } from './services/freeapi.service';
   providers: [freeapiservice],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

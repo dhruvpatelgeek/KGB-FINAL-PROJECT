@@ -14,8 +14,10 @@ import { Output, EventEmitter } from '@angular/core';
 export class LandingPageComponent implements OnInit { // get the mapbox GL on load 
 
     //send message ot the parent node to change the view
-    @Output() authStatus = new EventEmitter<boolean>();
 
+    //[events]-----------------------------
+    @Output() authStatus = new EventEmitter<boolean>();
+    //-------------------------------------
     uuid:string='';
     oneTimeCode:string='';
     status:string="SEND CODE TO EMAIL";
@@ -47,12 +49,12 @@ export class LandingPageComponent implements OnInit { // get the mapbox GL on lo
         } else {
           this._freeapiservice.requestSendPassword(this.uuid,this.oneTimeCode).toPromise().then((res)=>{
             if(res.isPasswordCorrect==true){
-              alert("login verified")
-
+              //alert("login verified")
+              this.authStatus.emit(true)
             } else {
               // reset to the previous state
               this.showOneTimeField=false
-              this.authStatus.emit(true)
+              alert("wrong password")
             }
           }).finally(()=>{
             console.log("POST REQUEST DONE")
