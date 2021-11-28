@@ -46,7 +46,7 @@ app.use((req, res, next) => {
 app.post('/user/add', (req, res)=>{
     console.log(req)
     const user = new User(req.body)
-
+    user.time
     user.save().then(()=>{
         res.send("save correctly")
     }).catch((e)=>{

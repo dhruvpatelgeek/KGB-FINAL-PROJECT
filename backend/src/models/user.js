@@ -9,10 +9,7 @@ const User = mongoose.model('User',{
     fingerprint:{
         type: String
     },
-    timestamps: {
-        type: Date,
-        default: Date.now
-    },
+    opts,
     createdBy: {
         type: String,
         default: "UBC"
