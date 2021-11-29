@@ -156,7 +156,7 @@ app.post('/subscribe', (req, res)=>{
 
 
 // --------------------------------------------------------------]
-app.pose('/deleteAllUsers', (req, res)=>{
+app.post('/deleteAllUsers', (req, res)=>{
     User.remove({}).then(()=>{
         res.send("workds")
     }).catch((e)=>{
