@@ -1,3 +1,4 @@
+const { Int32 } = require('bson');
 const mongoose = require('mongoose')
 
 const opts = {
@@ -6,9 +7,9 @@ const opts = {
 };
 
 const User = mongoose.model('User',{
-    fingerprint:{
-        type: String
-    },
+    fingerprint:[{
+        type: Number
+    }],
     timestamps: { 
         type: String
     },
