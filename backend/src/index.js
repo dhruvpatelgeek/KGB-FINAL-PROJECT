@@ -45,8 +45,11 @@ app.use((req, res, next) => {
 // })
 app.post('/user/add', (req, res)=>{
     console.log(req)
-    const user = new User(req.body)
-    user.time
+    const user = new User({
+        fingerprint: req.body.fingerprint,
+        timestamps: new Date().toISOString()
+    })
+    
     user.save().then(()=>{
         res.send("save correctly")
     }).catch((e)=>{
