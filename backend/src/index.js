@@ -152,6 +152,20 @@ app.post('/subscribe', (req, res)=>{
     webpush.sendNotification(subscription, payload).catch(err=> console.error(err));
 })
 
+
+
+
+// --------------------------------------------------------------]
+app.pose('/deleteAllUsers', (req, res)=>{
+    User.remove({}).then(()=>{
+        res.send("workds")
+    }).catch((e)=>{
+        res.status(201).json({})
+    })
+})
+
+
+
 app.listen(port, ()=>{
     console.log('Backend server listening on ['+port+']')
 })
