@@ -67,26 +67,19 @@ app.post('/getAll', (req, res)=>{
 })
 
 app.post('/ShoppersgetAll', (req, res)=>{
-        User.find({}).then(toret => {
-            var res = []
-            toret.forEach((e)=>{
-                res.push({
-                    timestamps: e.timestamps,
-                    createdBy: e.createdBy
-                })
+    User.find({}).then(toret => {
+        var res = []
+        toret.forEach((e)=>{
+            res.push({
+                timestamps: e.timestamps,
+                createdBy: e.createdBy
             })
-            res.send(res)
-        }).catch((error)=>{
-            res.status(500).send(error);
         })
-        
-
+        res.send(res)
     }).catch((error)=>{
-        jsonResponseObject=JSON.stringify({ isPasswordCorrect: false,err: error})
-        res.status(500).send(jsonResponseObject);
+        res.status(500).send(error);
     })
-    
-    
+        
 })
 
 
