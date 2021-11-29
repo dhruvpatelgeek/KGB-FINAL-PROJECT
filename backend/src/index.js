@@ -160,6 +160,12 @@ app.post('/deleteAllUsers', (req, res)=>{
     })
 })
 
+app.post('/checkin', (req, res) => {
+    console.log(req.body.fingerprint)
+    console.log(req.body.timestamp)
+    res.status(200).send();
+})
+
 
 
 app.listen(port, ()=>{
