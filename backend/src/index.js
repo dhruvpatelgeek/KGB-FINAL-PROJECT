@@ -48,7 +48,8 @@ app.post('/user/add', (req, res)=>{
     const user = new User({
         fingerprint: req.body.fingerprint,
         timestamps: new Date().toISOString(),
-        tag: req.body.tag
+        tag: req.body.tag,
+        nonce: req.body.nonce
     })
     
     user.save().then(()=>{

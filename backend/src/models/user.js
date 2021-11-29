@@ -10,6 +10,9 @@ const User = mongoose.model('User',{
     tag:{
         type: String
     },
+    nonce:{
+        type: String
+    },
     fingerprint:{
         type: String
     },
