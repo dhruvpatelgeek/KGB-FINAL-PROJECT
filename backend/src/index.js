@@ -78,7 +78,9 @@ app.post('/ShoppersgetAll', (req, res)=>{
             res.push({
                 timestamps: e.timestamps,
                 createdBy: e.createdBy,
-                fingerprint: crypto.createHash(e.fingerprint)
+                fingerprint: crypto.createHash("sha256")
+                .update(e.fingerprint)
+                .digest("hex")
             })
         })
         res.send(res)
