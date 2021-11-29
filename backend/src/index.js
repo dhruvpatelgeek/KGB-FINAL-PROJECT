@@ -149,7 +149,7 @@ app.post('/subscribe', (req, res)=>{
 })
 
 
-
+var verified=[];
 
 // --------------------------------------------------------------]
 app.post('/deleteAllUsers', (req, res)=>{
@@ -161,11 +161,26 @@ app.post('/deleteAllUsers', (req, res)=>{
 })
 
 app.post('/checkin', (req, res) => {
-    console.log(req.body.fingerprint)
-    console.log(req.body.timestamp)
-    res.status(200).send();
+
+    verified.push(
+    {
+        "hashedFingerprint": req.body.hashedFingerprint,
+        "timestamp":req.body.timestamp,
+        "hashedPiId": req.body.hashedPiId
+    })
+    var index = verified.length - 1;
+    console.log(verified)
+    // setTimeout(()=>{
+    //     verified.remove(index);
+    // },1000)
+    res.status(200).send("correctlly added");
 })
 
+app.post('/getCheckin', (req, res) => {
+    stringedVerified=JSON.stringify(verified);
+    console.log(stringedVerified)
+    res.status(200).send(stringedVerified);
+})
 
 
 app.listen(port, ()=>{
