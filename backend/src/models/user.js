@@ -9,8 +9,8 @@ const User = mongoose.model('User',{
     fingerprint:{
         type: String
     },
-    timestamps: {
-        type: string
+    timestamps: { 
+        type: String
     },
     createdBy: {
         type: String,
