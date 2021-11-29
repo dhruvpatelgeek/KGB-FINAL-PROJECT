@@ -73,9 +73,9 @@ app.post('/getAll', (req, res)=>{
 
 app.post('/ShoppersgetAll', (req, res)=>{
     User.find({}).then(toret => {
-        var res = []
+        var result = []
         toret.forEach((e)=>{
-            res.push({
+            result.push({
                 timestamps: e.timestamps,
                 createdBy: e.createdBy,
                 fingerprint: crypto.createHash("sha256")
@@ -83,7 +83,7 @@ app.post('/ShoppersgetAll', (req, res)=>{
                 .digest("hex")
             })
         })
-        res.send(res)
+        res.send(result)
     }).catch((error)=>{
         res.status(500).send(error);
     })
