@@ -5,14 +5,36 @@ const User = require('./models/user')
 const Shopper = require('./models/shoppers')
 const sending = require('./func/sendingEmail')
 var generator = require('generate-password');
+var crypto = require('crypto');
 
+
+const webpush = require('web-push')
+
+
+const publicVapidKey = "BCiMs0S9ZX0R_hHLDpc7q_WtPVTXor1QTy1J3Xl_Vg9pylJjlW8OpzeR-J7TTfLyKbc-3czy2buTDtInggcPPTI"
+const privateVapidKey = "ZkNbps78RWhjovhIi-FmR8ovsTBA2PcwcUVKKHkOM3Q"
+webpush.setVapidDetails('mailto:cpen442fastscan@gmail.com', publicVapidKey, privateVapidKey)
 // require('./preInsertUUID')
 
 const app = express()
 const port = process.env.PORT || 3000
+var ctr=0
+
+// to compare password hashes
+var crypto = require('crypto');
 
 app.use(express.json())
 
+
+
+
+  // allow access form any HOST
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET , PUT , POST , DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, x-requested-with");
+    next(); // Important
+})
 
 
 // app.post('/users', (req, res)=>{
@@ -26,8 +48,13 @@ app.use(express.json())
 // })
 app.post('/user/add', (req, res)=>{
     console.log(req)
-    const user = new User(req.body)
-
+    const user = new User({
+        fingerprint: req.body.fingerprint,
+        timestamps: new Date().toISOString(),
+        tag: req.body.tag,
+        nonce: req.body.nonce
+    })
+    
     user.save().then(()=>{
         res.send("save correctly")
     }).catch((e)=>{
@@ -35,7 +62,8 @@ app.post('/user/add', (req, res)=>{
     })
 })
 
-app.get('/getAll', (req, res)=>{
+
+app.post('/getAll', (req, res)=>{
     User.find({}).then(toret => {
         res.send(toret)
     }).catch((error)=>{
@@ -43,32 +71,118 @@ app.get('/getAll', (req, res)=>{
     })
 })
 
+app.post('/ShoppersgetAll', (req, res)=>{
+    User.find({}).then(toret => {
+        var result = []
+        toret.forEach((e)=>{
+            result.push({
+                _id: e._id,
+                timestamps: e.timestamps,
+                createdBy: e.createdBy,
+                fingerprint: crypto.createHash("sha256")
+                .update(e.fingerprint)
+                .digest("hex")
+            })
+        })
+        res.send(result)
+    }).catch((error)=>{
+        res.status(500).send(error);
+    })
+        
+})
 
 
-app.get('/uuid/require', (req, res)=>{
+
+app.get('/verified', (req, res)=>{
+    let id = req.body().id
+
+})
+
+
+
+app.post('/uuid/require', (req, res)=>{
     var newPassword = generator.generate({
         length: 10,
         numbers: true
     });
+  
     Shopper.findOneAndUpdate({uuid: req.body.uuid}, {password: newPassword}).then( shopper => {
         sending(shopper.email, newPassword)
-        res.send("sending")
+        res.status(200).send("sending")
     }).catch((error)=>{
-        res.status(500).send(error);
+        console.log(error);
+        res.status(500).send(error+"error finding json in body");
     })
 })
 
-app.get('/uuid/verify', (req, res)=>{
+app.post('/uuid/verify', (req, res)=>{
+    console.log("verifying password for "+req.body.uuid);
     Shopper.findOne({uuid: req.body.uuid}).then( shopper => {
-        console.log(shopper.password)
-        console.log(req.body.password)
-        res.send(shopper.password == req.body.password)
+
+        var passwordHash = crypto.createHash('sha256').update(shopper.password).digest('hex');
+        console.log("password is "+shopper.password)
+        console.log("password recided  is "+req.body.password)
+        console.log("password in store is "+passwordHash)
+        
+        jsonResponseObject=JSON.stringify({ isPasswordCorrect: passwordHash==req.body.password,err: "nil"})
+
+        // if(true){ // debug mode
+        //     jsonResponseObject=JSON.stringify({ isPasswordCorrect: true,err: "nil"})
+        // }
+        res.send(jsonResponseObject)
     }).catch((error)=>{
-        res.status(500).send(error);
+        jsonResponseObject=JSON.stringify({ isPasswordCorrect: false,err: error})
+        res.status(500).send(jsonResponseObject);
     })
     
 })
 
+
+app.post('/subscribe', (req, res)=>{
+    const subscription = req.body;
+
+    res.status(201).json({})
+
+    const payload = JSON.stringify({title: 'Section.io Push Notification' });
+
+    webpush.sendNotification(subscription, payload).catch(err=> console.error(err));
+})
+
+
+var verified=[];
+
+// --------------------------------------------------------------]
+app.post('/deleteAllUsers', (req, res)=>{
+    User.remove({}).then(()=>{
+        res.send("workds")
+    }).catch((e)=>{
+        res.status(201).json({})
+    })
+})
+
+app.post('/checkin', (req, res) => {
+
+    verified.push(
+    {
+        "hashedFingerprint": req.body.hashedFingerprint,
+        "timestamp":req.body.timestamp,
+        "hashedPiId": req.body.hashedPiId
+    })
+    var index = verified.length - 1;
+    console.log(verified)
+    // setTimeout(()=>{
+    //     verified.remove(index);
+    // },1000)
+    res.status(200).send("correctlly added");
+})
+
+app.post('/getCheckin', (req, res) => {
+    stringedVerified=JSON.stringify(verified);
+    //console.log(stringedVerified)
+    res.status(200).send(stringedVerified);
+})
+
+
 app.listen(port, ()=>{
-    console.log('Server Listening!')
+    console.log('Backend server listening on ['+port+']')
 })

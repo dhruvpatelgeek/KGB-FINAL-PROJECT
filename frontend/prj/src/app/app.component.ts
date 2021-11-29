@@ -6,8 +6,31 @@ import { Map } from 'mapbox-gl';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit { // get the mapbox GL on load 
+export class AppComponent implements OnInit { 
+  authStatus:boolean=false
+  showLandingPage:boolean=true
+  showStreamingPage:boolean=false
   ngOnInit() {    
+  }
+  setAuth() {
+    //alert("parent recived the auth status to be true")
+    this.authStatus=true
+    // first remove the old landing page 
+    this.showLandingPage=false
+    setTimeout(()=>{
+      this.showStreamingPage=true
+    }, 100);
+    // then add the new banner 
+
+  }
+  signOut(){
+
+    this.authStatus=false;
+    // first remove the old landing page 
+    this.showStreamingPage=false
+    setTimeout(()=>{
+      this.showLandingPage=true
+    }, 100);
   }
 }
 

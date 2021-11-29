@@ -106,3 +106,47 @@ button:active:enabled {
 #logo-img {
     width: 25vw;
 }
+
+
+/*images-----------------*/
+#user_stream{
+    /* background-color: powderblue; */
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: minmax(20vh,auto);
+    width: 90vw;
+    gap: 1vw;
+}
+.user-card{
+    /* background-color: palevioletred; */
+    display: flex;
+    grid-gap: 10px;
+    grid-template-columns: 1 1;
+    grid-template-rows:1;
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 19px 38px, rgba(0, 0, 0, 0.01) 0px 15px 12px;
+}
+.user-card:hover{
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    transition: 0.3s;
+}
+.user-card:active{
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    transition: 0.3s;
+}
+.user-fingerprint{
+    
+    grid-column: 1/2;
+}
+.user-details{
+    grid-column: 2/1;
+}
+.user-id{
+    width: 10vw;
+    word-wrap:break-word;
+    font-family: Lato;
+    font-size:10px;
+}
+
+.user-details{
+}
