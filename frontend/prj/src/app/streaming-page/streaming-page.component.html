@@ -22,11 +22,11 @@
         <div class="user-card" *ngFor="let user of user_array" >
             <!-- https://identicon-api.herokuapp.com/luqman/ -->
             <!-- <img class="center" src="https://identicon-api.herokuapp.com//220?format=svg"> -->
-            <img class="user-fingerprint" src="https://identicon-api.herokuapp.com/{{user.fingerprint}}/220?format=png" alt="">
+            <img class="user-fingerprint" src="https://identicon-api.herokuapp.com/{{user.hashedFingerprint}}/220?format=png" alt="">
             <div class="user-details">
-                <p class="user-id">ID: {{user._id}}</p>
-                <p class="user-id">fingerprint: {{user.fingerprint}}</p>
-                <p class="user-id">Timestamp: 2021-11-20 10:18+00:00</p>
+                <p class="user-id">piID :{{user.hashedPiId}}</p>
+                <p class="user-id">fingerprint: {{user.hashedFingerprint}}</p>
+                <p class="user-id">Timestamp: {{user.timestamp}}</p>
                 <p class="user-id">verified-by: UBC</p>
             </div>
     </div>

@@ -1,5 +1,5 @@
 export class Users{
-	_id:string | undefined;
-	fingerprint:string | undefined;
-    __v: number | undefined;
+	hashedFingerprint:string | undefined;
+	timestamp:string | undefined;
+    hashedPiId: string | undefined;
 }

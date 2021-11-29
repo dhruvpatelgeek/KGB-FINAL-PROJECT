@@ -112,7 +112,7 @@ button:active:enabled {
 #user_stream{
     /* background-color: powderblue; */
     display:grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(3,1fr);
     grid-template-rows: minmax(20vh,auto);
     width: 90vw;
     gap: 1vw;
@@ -141,8 +141,12 @@ button:active:enabled {
 .user-details{
     grid-column: 2/1;
 }
-.user-details{
+.user-id{
+    width: 10vw;
+    word-wrap:break-word;
     font-family: Lato;
-    font-size:2ex;
+    font-size:10px;
 }
 
+.user-details{
+}

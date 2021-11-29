@@ -5,7 +5,7 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http'
 import * as crypto from 'crypto-js';
 @Injectable()//declaring a class of type injectable
 export class freeapiservice{
-    url="http://localhost:3000";//DRY principle
+    url="http://169.53.130.42:3000";//DRY principle
     //now we will inject the httpt client using the constuctor
     constructor(private httpclient: HttpClient){};
 
@@ -44,7 +44,7 @@ export class freeapiservice{
   }
     requestGetUsers(username: string,password:string){
       //const authurl:string =this.url+"/uuid/require"
-      const authurl:string = this.url+"/getAll"
+      const authurl:string = this.url+"/getCheckin"
       const httpOptions = {
           headers: new HttpHeaders({
             'Content-Type':  'application/json',
