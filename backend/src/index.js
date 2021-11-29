@@ -5,6 +5,9 @@ const User = require('./models/user')
 const Shopper = require('./models/shoppers')
 const sending = require('./func/sendingEmail')
 var generator = require('generate-password');
+var crypto = require('crypto');
+
+
 const webpush = require('web-push')
 
 
@@ -74,7 +77,8 @@ app.post('/ShoppersgetAll', (req, res)=>{
         toret.forEach((e)=>{
             res.push({
                 timestamps: e.timestamps,
-                createdBy: e.createdBy
+                createdBy: e.createdBy,
+                fingerprint: crypto.createHash(e.fingerprint)
             })
         })
         res.send(res)
