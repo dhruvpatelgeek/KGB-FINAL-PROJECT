@@ -79,7 +79,14 @@ app.post('/ShoppersgetAll', (req, res)=>{
 
         if(passwordHash == req.body.password){
             User.find({}).then(toret => {
-                res.send(toret)
+                var res = []
+                toret.forEach((e)=>{
+                    res.push({
+                        timestamps: e.timestamps,
+                        createdBy: e.createdBy
+                    })
+                })
+                res.send(res)
             }).catch((error)=>{
                 res.status(500).send(error);
             })

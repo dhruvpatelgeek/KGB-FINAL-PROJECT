@@ -7,9 +7,9 @@ const opts = {
 };
 
 const User = mongoose.model('User',{
-    fingerprint:[{
-        type: Number
-    }],
+    fingerprint:{
+        type: String
+    },
     timestamps: { 
         type: String
     },
