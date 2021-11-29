@@ -10,7 +10,7 @@ const User = mongoose.model('User',{
         type: String
     },
     timestamps: {
-        type: Number
+        type: string
     },
     createdBy: {
         type: String,
