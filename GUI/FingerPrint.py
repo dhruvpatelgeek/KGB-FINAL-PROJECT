@@ -4,7 +4,7 @@
 import time
 import board
 from digitalio import DigitalInOut, Direction
-import adafruit_fingerprint
+import adafruit_fingerprint_fix as adafruit_fingerprint
 
 led = DigitalInOut(board.D13)
 led.direction = Direction.OUTPUT
@@ -13,7 +13,7 @@ import serial
 uart = serial.Serial("/dev/ttyS0", baudrate=57600, timeout=1)
 
 finger = adafruit_fingerprint.Adafruit_Fingerprint(uart)
-
+saved_model = None
 
 def get_fingerprint():
     """Get a finger print image, template it, and see if it matches!"""
@@ -191,9 +191,8 @@ while True:
             print(finger.templates)
             print("add saved fingerprint")
             testarr = [0,1,2,3]*10
-            print("sending", saved_model)
-            print("length is ", len(saved_model))
             test = finger.send_fpdata(saved_model, "char")
+            print(type(saved_model[0]))
             time.sleep(5)
             print(test)
             status = finger.read_templates()

@@ -147,7 +147,6 @@ class Adafruit_Fingerprint:
         """Returns the system parameters on success via attributes."""
         self._send_packet([_READSYSPARA])
         r = self._get_packet(28)
-        print("packet received is ", r)
         if r[0] != OK:
             raise RuntimeError("Command failed.")
         self.status_register = struct.unpack(">H", bytes(r[1:3]))[0]
@@ -456,10 +455,6 @@ class Adafruit_Fingerprint:
         self._print_debug("_send_data sensor data length:", data_length)
         i = 0
         left = len(data)
-        
-        print("data", len(data))
-        print("data_length", data_length)
-
 
         '''for i in range(int(len(data) / data_length)):
             start = i * data_length
@@ -502,7 +497,6 @@ class Adafruit_Fingerprint:
             if(i == N-1):
                 end = len(data)
             
-            print("sending data from index " + str(start) + " to " + str(end - 1))
             left = left - data_length
             self._print_debug("_send_data data start:", start)
             self._print_debug("_send_data data end:", end)
@@ -511,15 +505,12 @@ class Adafruit_Fingerprint:
             packet = [_STARTCODE >> 8, _STARTCODE & 0xFF]
             packet = packet + self.address
             
-            print("i: ", i)
-            print("left: ", left)
             if left < 0:
                 packet.append(_ENDDATAPACKET)
             else:
                 packet.append(_DATAPACKET)
 
             length = len(data[start:end]) + 2
-            print("packet length is " , length)
             self._print_debug("_send_data length:", str(length))
             packet.append(length >> 8)
             packet.append(length & 0xFF)
