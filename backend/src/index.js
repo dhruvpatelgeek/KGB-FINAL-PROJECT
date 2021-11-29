@@ -178,7 +178,7 @@ app.post('/checkin', (req, res) => {
 
 app.post('/getCheckin', (req, res) => {
     stringedVerified=JSON.stringify(verified);
-    console.log(stringedVerified)
+    //console.log(stringedVerified)
     res.status(200).send(stringedVerified);
 })
 
