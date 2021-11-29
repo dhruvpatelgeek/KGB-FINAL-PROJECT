@@ -76,6 +76,7 @@ app.post('/ShoppersgetAll', (req, res)=>{
         var result = []
         toret.forEach((e)=>{
             result.push({
+                id: e._id,
                 timestamps: e.timestamps,
                 createdBy: e.createdBy,
                 fingerprint: crypto.createHash("sha256")
