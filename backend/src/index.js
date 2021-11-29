@@ -67,32 +67,19 @@ app.post('/getAll', (req, res)=>{
 })
 
 app.post('/ShoppersgetAll', (req, res)=>{
-    console.log("verifying password for "+req.body.uuid);
-    Shopper.findOne({uuid: req.body.uuid}).then( shopper => {
-
-        var passwordHash = crypto.createHash('sha256').update(shopper.password).digest('hex');
-        console.log("password is "+shopper.password)
-        console.log("password recided  is "+req.body.password)
-        console.log("password in store is "+passwordHash)
-
-        jsonResponseObject=JSON.stringify({ isPasswordCorrect: passwordHash==req.body.password,err: "nil"})
-
-        if(passwordHash == req.body.password){
-            User.find({}).then(toret => {
-                var res = []
-                toret.forEach((e)=>{
-                    res.push({
-                        timestamps: e.timestamps,
-                        createdBy: e.createdBy
-                    })
+        User.find({}).then(toret => {
+            var res = []
+            toret.forEach((e)=>{
+                res.push({
+                    timestamps: e.timestamps,
+                    createdBy: e.createdBy
                 })
-                res.send(res)
-            }).catch((error)=>{
-                res.status(500).send(error);
             })
-        }else{
-            res.send(jsonResponseObject)
-        }
+            res.send(res)
+        }).catch((error)=>{
+            res.status(500).send(error);
+        })
+        
 
     }).catch((error)=>{
         jsonResponseObject=JSON.stringify({ isPasswordCorrect: false,err: error})
